@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TodoList.API.DATA.persistence.interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,18 +9,27 @@ namespace TodoList.API.Controllers
     [ApiController]
     public class TodoListController : ControllerBase
     {
+        public readonly ITodoList _todoList;
+
+        public TodoListController(ITodoList todoList)
+        {
+            _todoList = todoList;
+        }
+
         // GET: api/<TodoListController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            var items = await _todoList.GetAllAsync();
+            return Ok(items);
         }
 
         // GET api/<TodoListController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var item = await _todoList.GetByIdAsync(id);
+            return Ok(item);
         }
 
         // POST api/<TodoListController>
