@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TodoList.API.DATA.Domain;
 using TodoList.API.DATA.persistence.interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -40,14 +41,42 @@ namespace TodoList.API.Controllers
 
         // PUT api/<TodoListController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] TodoItem item)
         {
+            
+            if (id != item.Id)
+            {
+                return BadRequest("El ID no coincide con una tarea existente");
+            }
+
+            var existingTask = await _todoList.GetByIdAsync(id);
+
+            if (existingTask == null)
+            {
+                return NotFound();
+            }
+
+            // Actualizar
+            await _todoList.UpdateAsync(item);
+
+            return NoContent();
         }
 
         // DELETE api/<TodoListController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            
+            var existingTask = await _todoList.GetByIdAsync(id);
+            if (existingTask == null)
+            {
+                return NotFound();
+            }
+
+            // Borrar
+            await _todoList.DeleteAsync(id);
+
+            return NoContent();
         }
     }
 }
