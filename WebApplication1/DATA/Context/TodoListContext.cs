@@ -9,6 +9,6 @@ namespace TodoList.API.DATA.Context
         {
         }
 
-        public DbSet<TodoItem> Tareas { get; set; }
+        public DbSet<TodoItem> TodoItems { get; set; }
     }
 }
