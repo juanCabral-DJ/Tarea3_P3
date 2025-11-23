@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TodoList.API.DATA.Domain;
 
 namespace TodoList.API.DATA.Context
 {
