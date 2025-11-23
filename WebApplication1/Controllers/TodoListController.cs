@@ -46,7 +46,7 @@ namespace TodoList.API.Controllers
 
             await _todoList.AddAsync(item);
 
-            return Ok(item);
+            return CreatedAtAction(nameof(Get), new { id = item.Id }, item);
         }
 
         // PUT api/<TodoListController>/5
