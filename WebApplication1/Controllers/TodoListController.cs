@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TodoList.API.DATA.Domain;
 using TodoList.API.DATA.persistence.interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -34,8 +35,18 @@ namespace TodoList.API.Controllers
 
         // POST api/<TodoListController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] TodoItem item)
         {
+            if (item == null)
+            {
+                return BadRequest();
+            }
+
+            item.FechaCreacion = DateTime.UtcNow;
+
+            await _todoList.AddAsync(item);
+
+            return Ok(item);
         }
 
         // PUT api/<TodoListController>/5
